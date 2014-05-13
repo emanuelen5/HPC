@@ -1,7 +1,7 @@
 # Makefile for project
 CC = gcc
 LD = gcc
-CFLAGS = -O0 -Wall -Werror -g
+CFLAGS = -O0 -Wall -Werror -g -lm
 LDFLAGS = 
 RM = /bin/rm -f
 OBJS = main.o funcs.o
