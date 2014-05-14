@@ -35,33 +35,30 @@ int main(int argc, char **argv)
    
    printf("creating random stars: \t");
    start = clock();
-   
    create_random_array(stars, N);
-   
    end = clock();
    printtime(start, end);
  //  print_stars(stars, N);
          
    printf("sorting stars:    \t");
    start = clock();
-
    sort(stars, N);
-   
    end = clock();
    printtime(start, end);
 //      print_stars(stars, N);
    
    printf("allocating matrix: \t");
    start = clock();
-   float_t **matrix;
-   
+   float_t** matrix = (float_t**) malloc(N*sizeof(float_t*));
+   for(i = 0; i < N, i++) {
+      matrix[i] = (float_t*) malloc(N*sizeof(float_t);
+   }
    end = clock();
    printtime(start, end);
    
    printf("filling matrix: \t");
    start = clock();
    fill_matrix(stars, matrix, N);
-   
    //print_matrix(matrix,N);
    end = clock();
    printtime(start, end);
