@@ -1,9 +1,10 @@
 /*****
  *  Solution to examination project in High Performance Computing and Programming
  * 
- *  main.c main implementation file 
- *  
+ *  funcs.h functions header file
+ *
  * Author: Marcus Holm
+ * Edits: Erasmus Cedernaes
  *
  **/
 
@@ -12,7 +13,6 @@
 #include <math.h>
 #include "common.h"
 #include "funcs.h"
-
 #include <time.h>
 
 void printtime(clock_t s, clock_t e)
@@ -35,38 +35,38 @@ int main(int argc, char **argv)
    
    printf("creating random stars: \t");
    start = clock();
-   create_random_array(stars, N);
+      create_random_array(stars, N);
    end = clock();
    printtime(start, end);
- //  print_stars(stars, N);
+   print_stars(stars, N);
          
    printf("sorting stars:    \t");
    start = clock();
-   sort(stars, N);
+      sort(stars, N);
    end = clock();
    printtime(start, end);
-//      print_stars(stars, N);
+   print_stars(stars, N);
    
    printf("allocating matrix: \t");
    start = clock();
-   float_t** matrix = (float_t**) malloc(N*sizeof(float_t*));
-   for(i = 0; i < N, i++) {
-      matrix[i] = (float_t*) malloc(N*sizeof(float_t);
-   }
+      float_t** matrix = (float_t**) malloc(N*sizeof(float_t*));
+      for(i = 0; i < N, i++) {
+         matrix[i] = (float_t*) malloc(N*sizeof(float_t);
+      }
    end = clock();
    printtime(start, end);
    
    printf("filling matrix: \t");
    start = clock();
-   fill_matrix(stars, matrix, N);
-   //print_matrix(matrix,N);
+      fill_matrix(stars, matrix, N);
    end = clock();
    printtime(start, end);
+   print_matrix(matrix,N);
    
    printf("generating histogram: \t");
    start = clock();
-   int *histogram = (int *)calloc(NUM_HIST_BOXES,sizeof(int));
-   hist_param_t histparams = generate_histogram(matrix, histogram, N, NUM_HIST_BOXES);
+      int *histogram = (int *)calloc(NUM_HIST_BOXES,sizeof(int));
+      hist_param_t histparams = generate_histogram(matrix, histogram, N, NUM_HIST_BOXES);
    end = clock();
    printtime(start, end);
 

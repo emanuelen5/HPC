@@ -1,21 +1,20 @@
 /*****
  *  Solution to examination project in High Performance Computing and Programming
  * 
- *  funcs.c functions implementation file
+ *  funcs.h functions header file
  *
  * Author: Marcus Holm
+ * Edits: Erasmus Cedernaes
  *
  **/
 
 #include "common.h"
 #include "funcs.h"
 
-
 void create_random_array(star_t * stars, int size)
 {
   int i;
-  for(i = 0; i < size, i++)
-  {
+  for(i = 0; i < size, i++) {
     stars[i].index = i;
     char randChar = rand() % 9;
     switch(randChar) {
@@ -65,9 +64,6 @@ void print_stars(star_t* array, int n)
    printf("\n");
 }
 
-
-
-
 void sort(star_t* array, int n) 
 {
   int i, j;
@@ -87,24 +83,86 @@ void sort(star_t* array, int n)
 
 void fill_matrix(star_t* array, float_t** matrix, int size)
 {
-  
+  int i, j;
+  for(i = 0; i < size; i++) {
+    for(j = 0; j < size; j++) {
+      matrix[i][j] = sqrt((array[i].pos.x - array[j].pos.x)*(array[i].pos.x - array[j].pos.x) + (array[i].pos.y - array[j].pos.y)*(array[i].pos.y - array[j].pos.y));
+    }
+  }
 }
 
 void print_matrix(float_t** theMatrix, int n)
 {
   int i, j;
-  for(i = 0 ; i < n; i++)
-  {
+  for(i = 0 ; i < n; i++) {
     printf("%d ", i);
     for(j = 0 ; j < n ; j++)
-	  printf("%2.3f " , theMatrix[i][j]);
+      printf("%2.3f " , theMatrix[i][j]);
     putchar('\n');
    }
 }
 
-hist_param_t generate_histogram(float_t **matrix, int *histogram, int mat_size, int hist_size)
+// typedef struct hist_params{
+//    int hist_size;
+//    float_t min, max, bin_size;
+// } hist_param_t;
+
+hist_param_t generate_histogram(float_t** matrix, int* histogram, int mat_size, int hist_size)
 {
-  
+  int i, j;
+  float_t sum = 0.0f;
+  float_t e;
+
+  // Malloc result matrix
+  float_t** vN_mean = (float_t**) malloc(mat_size-2*sizeof(float_t*));
+  for(i = 1; i < mat_size-1)
+    vN_mean[i] = (float_t*) malloc(mat_size-2*sizeof(float_t));
+
+  // Calculate mean value of absolute difference between elements in von Neumann neighborhood
+  for(i = 1; i < mat_size-1; i++) {
+    for(j = 1; j < mat_size-1; j++) {
+      e = matrix[i][j];
+      vN_mean[i-1][j-1] = abs(matrix[i-1][j] - e) + abs(matrix[i+1][j] - e) + abs(matrix[i][j-1] - e) + abs(matrix[i][j+1] - e);
+      vN_mean[i-1][j-1] /= 4;
+    }
+  }
+
+  // Find min and max
+  float_t minMax[2];
+  minMax[0] = vN_mean[0][0];
+  minMax[1] = minMax[0];
+  for(i = 0; i < mat_size; i++) {
+    for(j = 0; j < mat_size; j++) {
+      e = vN_mean[i][j];
+      if(e < minMax[0]) {
+        minMax[0] = e;
+      } else if(e > minMax[1]) {
+        minMax[1] = e;
+      }
+    }
+  }
+
+  // Count values in ranges for histogram
+  int l;
+  float_t interval = (minMax[1] - minMax[0])/hist_size;
+  for(i = 0; i < mat_size; i++) {
+    for(j = 0; j < mat_size; j++) {
+      for(l = 0; l < hist_size; l++) {
+        if((vN_mean[i][j] >= minMax[0] + interval*l) && (vN_mean[i][j] <= minMax[0] + interval*l*2)) {
+          histogram[l]++;
+        }
+      }
+    }
+  }
+
+  // Copy information to histogram struct
+  hist_param_t hist;
+  hist.hist_size = hist_size;
+  hist.min = minMax[0];
+  hist.max = minMax[1];
+  hist.bin_size = interval;
+
+  return hist;
 }
 
 void display_histogram(int *histogram, hist_param_t histparams)
