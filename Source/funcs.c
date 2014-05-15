@@ -1,7 +1,7 @@
 /*****
  *  Solution to examination project in High Performance Computing and Programming
  * 
- *  funcs.h functions header file
+ *  funcs.c functions implementation file
  *
  * Author: Marcus Holm
  * Edits: Erasmus Cedernaes

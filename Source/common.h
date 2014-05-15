@@ -1,7 +1,7 @@
 /*****
  *  Solution to examination project in High Performance Computing and Programming
  * 
- *  funcs.h functions header file
+ *  common.h common definitions header file
  *
  * Author: Marcus Holm
  * Edits: Erasmus Cedernaes
